@@ -1,4 +1,4 @@
-module github.com/submariner-io/shipyard
+module github.com/sridhargaddam/shipyard
 
 go 1.13
 
