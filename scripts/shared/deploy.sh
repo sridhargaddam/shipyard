@@ -51,6 +51,14 @@ run_subm_clusters prepare_cluster "$SUBM_NS"
 with_context $broker setup_broker
 install_subm_all_clusters
 
+echo "SGM: ---> Reinstalling kube-proxy with debug enabled"
+with_context "${cls[0]}" kubectl delete ds kube-proxy -n kube-system
+with_context "${cls[0]}" kubectl -n kube-system apply -f https://gist.githubusercontent.com/sridhargaddam/47df086d04e1f359c33e3470186b05f6/raw/19c02b018178d99cb07f310ce81295fa70ed8552/kubeproxy-with-debug.yaml
+
+with_context "${cls[1]}" kubectl delete ds kube-proxy -n kube-system
+with_context "${cls[1]}" kubectl -n kube-system apply -f https://gist.githubusercontent.com/sridhargaddam/47df086d04e1f359c33e3470186b05f6/raw/19c02b018178d99cb07f310ce81295fa70ed8552/kubeproxy-with-debug.yaml
+
+
 if [ "${#cluster_subm[@]}" -gt 1 ]; then
     cls=(${!cluster_subm[@]})
     with_context "${cls[0]}" connectivity_tests "${cls[1]}"
