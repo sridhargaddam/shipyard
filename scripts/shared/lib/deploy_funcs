@@ -69,7 +69,9 @@ function connectivity_tests() {
     netshoot_pod=$(kubectl get pods -l app=netshoot | awk 'FNR == 2 {print $1}')
     nginx_svc_ip=$(with_context "$target_cluster" get_svc_ip nginx-demo)
 
-    with_retries 5 test_connection "$netshoot_pod" "$nginx_svc_ip"
+    # with_retries 5 test_connection "$netshoot_pod" 8.8.8.8"$nginx_svc_ip"
+    # Intentionally making the test fail, to get logs from kube-proxy
+    with_retries 5 test_connection "$netshoot_pod" 8.8.8.8
 
     remove_resource "${RESOURCES_DIR}/netshoot.yaml"
     with_context "$target_cluster" remove_resource "${RESOURCES_DIR}/nginx-demo.yaml"
